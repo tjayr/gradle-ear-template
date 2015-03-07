@@ -1,0 +1,37 @@
+version = '1.0'
+
+ext.jbossHome = hasProperty('jbossHome') ? jbossHome : "/home/tony/software/wildfly-8.2.0.Final"
+
+subprojects {
+
+    apply plugin: 'pmd'
+    apply plugin: 'jacoco'
+    apply plugin: 'findbugs'
+    //apply plugin: 'checkstyle'
+
+
+    ext.libraryVersions = [
+            javaee : '6.0',
+            junit : '4.11',
+            arquillian : '1.1.5.Final',
+            shrinkWrapResolverGradle: '2.2.0-beta-1',
+            arquillianWlp: '1.0.0.Beta2'
+    ]
+
+    repositories {
+        maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss' }
+        maven { url 'https://repository.jboss.org/nexus/content/repositories' }
+        maven { url 'https://repository.jboss.org/nexus/content/repositories/thirdparty-releases' }
+        mavenCentral()
+    }
+
+   /* checkstyle {
+        configFile = new File(rootDir, "checkstyle.xml")
+    }*/
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
+
