@@ -1,5 +1,6 @@
 apply plugin: 'ear'
 
 dependencies {
-    deploy project(':gradle-ejb')           
+    deploy project(':gradle-ejb')
+    earlib group: "org.slf4j", name: "slf4j-api", version:"1.7.10"
 }

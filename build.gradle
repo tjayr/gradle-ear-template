@@ -1,13 +1,26 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.4.1.RELEASE"
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
 version = '1.0'
 
 ext.jbossHome = hasProperty('jbossHome') ? jbossHome : "/home/tony/software/wildfly-8.2.0.Final"
 
 subprojects {
-
+    apply plugin: 'java'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
-    apply plugin: 'findbugs'
+    //apply plugin: 'findbugs'
     //apply plugin: 'checkstyle'
+
+    def jdkHome = System.getenv("JAVA_HOME")
 
 
     ext.libraryVersions = [
@@ -15,19 +28,29 @@ subprojects {
             junit : '4.11',
             arquillian : '1.1.5.Final',
             shrinkWrapResolverGradle: '2.2.0-beta-1',
-            arquillianWlp: '1.0.0.Beta2'
+            arquillian: '1.0.0.Beta2',
+            hyperSql: '2.3.1' ,
+            slf4j: '1.7.10',
+            arquillianPersistence: '1.0.0.Alpha7'
     ]
 
     repositories {
+        mavenLocal()
         maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss' }
         maven { url 'https://repository.jboss.org/nexus/content/repositories' }
         maven { url 'https://repository.jboss.org/nexus/content/repositories/thirdparty-releases' }
         mavenCentral()
     }
 
-   /* checkstyle {
-        configFile = new File(rootDir, "checkstyle.xml")
-    }*/
+    dependencies {
+        testCompile 'org.jboss.arquillian.junit:arquillian-junit-container'
+        testCompile "org.jboss.arquillian.extension:arquillian-persistence-dbunit:${libraryVersions.arquillianPersistence}"
+        testCompile 'junit:junit:4.+'
+    }
+
+     /*checkstyle {
+         configFile = new File(rootDir, "checkstyle.xml")
+     } */
 
 }
 

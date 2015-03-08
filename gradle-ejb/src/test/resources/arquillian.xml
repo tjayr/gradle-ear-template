@@ -9,7 +9,7 @@
         <property name="deploymentExportPath">build/arquillian</property>
     </engine>
 
-    <container qualifier="websphere-remote" default="false">
+    <container qualifier="wlp-remote" default="false">
         <configuration>
             <property name="hostName">localhost</property>
             <property name="serverName">defaultServer</property>
@@ -20,9 +20,22 @@
         </configuration>
     </container>
 
-    <container qualifier="jboss" default="true">
+
+    <container qualifier="websphere" default="true">
         <configuration>
-            <property name="jbossHome">${JBOSS_HOME}</property>
+            <property name="remoteServerAddress">localhost</property>
+            <property name="remoteServerSoapPort">8880</property>
+            <property name="securityEnabled">true</property>
+            <property name="username">admin</property>
+            <property name="password">admin</property>
+            <!--<property name="sslTrustStore">C:/IBM/WebSphere/AppServer/profiles/AppSrv01/etc/DummyClientTrustFile.jks</property>
+            <property name="sslTrustStorePassword">WebAS</property> -->
+        </configuration>
+    </container>
+
+    <container qualifier="jboss" default="false">
+        <configuration>
+            <property name="jbossHome">/home/tony/software/wildfly-8.2.0.Final</property>
         </configuration>
     </container>
 

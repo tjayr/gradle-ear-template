@@ -1,29 +1,59 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.4.1.RELEASE"
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
 apply plugin: 'java'
+
+
+def jdkHome = System.getenv("JAVA_HOME")
+def wasHome = System.getenv("WAS85_HOME")
+if(wasHome == null) {
+    wasHome = "/home/tony/IBM/WebSphere/AppServer"
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.7.Final'
+    }
+}
+
+
+sourceCompatibility = '1.6'
+
+targetCompatibility = '1.6'
+
 
 dependencies {        
     compile "javax:javaee-api:${libraryVersions.javaee}"
 
-    testCompile "junit:junit:${libraryVersions.junit}"
-   /* testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${libraryVersions.arquillian}"
-    testCompile "org.jboss.arquillian.protocol:arquillian-protocol-servlet:${libraryVersions.arquillian}"
-    testCompile "org.jboss.arquillian.container:arquillian-wlp-remote-8.5:${libraryVersions.arquillianWlp}"*/
+    testCompile 'org.jboss.arquillian.junit:arquillian-junit-container'
+    testCompile 'junit:junit:4.+'
 
-
-    testCompile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.1.0'
-    testCompile 'org.jboss.arquillian:arquillian-bom:1.1.2.Final-wildfly-1'
-    testCompile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.2.Final-wildfly-1'
-
-    testRuntime 'org.jboss.logging:jboss-logging:3.1.4.GA'
-    /**
-     * Embedded means it runs in the same JVM, it still needs the full installation
-     */
-    testRuntime 'org.wildfly:wildfly-arquillian-container-embedded:8.0.0.Final'
-
+    testCompile "org.hsqldb:hsqldb:${libraryVersions.hyperSql}"
+    testRuntime "org.jboss.arquillian.container:arquillian-was-remote-8.5:1.0.0.Final-SNAPSHOT"
+    testRuntime files("$jdkHome/lib/tools.jar")
+    testRuntime files("$wasHome/dev/was_public.jar")
+    testRuntime files("$wasHome/java/jre/lib/ibmjgssprovider.jar")
+    testRuntime fileTree(dir: "$wasHome/runtimes/", include: '*.jar')
+    testRuntime 'org.jboss.logmanager:jboss-logmanager:1.5.4.Final'
 }
 
 
-test{
+test {
     jvmArgs '-XX:MaxPermSize=256m'
-    environment 'JBOSS_HOME', rootProject.jbossHome
+    environment 'WAS85_HOME', wasHome
+
     systemProperty 'java.util.logging.manager', 'org.jboss.logmanager.LogManager'
+
+    testLogging {
+        exceptionFormat = 'full'
+    }
+
 }
