@@ -1,0 +1,41 @@
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+configurations {
+    install
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.5.Final'
+        mavenBom 'org.jboss.spec:jboss-javaee-6.0:3.0.0.Final'
+    }
+}
+dependencies {
+    testCompile 'org.jboss.arquillian.junit:arquillian-junit-container'
+    testCompile 'org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee'
+
+    testCompile 'org.jboss.spec.javax.servlet:jboss-servlet-api_3.0_spec'
+    testCompile 'javax.enterprise:cdi-api'
+    testRuntime 'org.wildfly:wildfly-arquillian-container-managed:8.1.0.Final'
+    testCompile 'junit:junit:4.+'
+
+    install 'org.wildfly:wildfly-dist:8.1.0.Final@zip'
+}
+
+test {
+    systemProperty 'arq.container.wildfly.configuration.jbossHome', 'build/unpacked/dist/wildfly-8.1.0.Final'
+    systemProperty 'arquillian.launch', 'wildfly'
+}
+
+task unzip(type: Copy) {
+    def zipFile = configurations.install.singleFile
+    def outputDir = file("${buildDir}/unpacked/dist")
+
+    from zipTree(zipFile)
+    into outputDir
+
+    tasks.test.dependsOn unzip
+}

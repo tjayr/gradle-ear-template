@@ -1,0 +1,27 @@
+def jdkHome = System.getenv("JAVA_HOME")
+def wasHome = System.getenv("WAS85_HOME")
+if(wasHome == null) {
+    wasHome = "/home/tony/IBM/WebSphere/AppServer"
+}
+
+
+dependencies {
+    testRuntime "org.jboss.arquillian.container:arquillian-was-remote-8.5:1.0.0.Final-SNAPSHOT"
+    testRuntime files("$jdkHome/lib/tools.jar")
+    testRuntime files("$wasHome/dev/was_public.jar")
+    testRuntime files("$wasHome/java/jre/lib/ibmjgssprovider.jar")
+    testRuntime fileTree(dir: "$wasHome/runtimes/", include: '*.jar', exclude: '*.thinclient_8.5.0.jar')
+}
+
+
+test {
+    jvmArgs '-XX:MaxPermSize=256m'
+    environment 'WAS85_HOME', wasHome
+
+    systemProperty 'java.util.logging.manager', 'org.jboss.logmanager.LogManager'
+
+    testLogging {
+        exceptionFormat = 'full'
+    }
+
+}

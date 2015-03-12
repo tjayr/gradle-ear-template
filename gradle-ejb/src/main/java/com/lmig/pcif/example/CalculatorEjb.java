@@ -1,10 +1,5 @@
 package com.lmig.pcif.example;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ejb.Local;
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 
