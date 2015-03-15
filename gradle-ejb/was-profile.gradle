@@ -11,6 +11,7 @@ dependencies {
     testRuntime files("$wasHome/dev/was_public.jar")
     testRuntime files("$wasHome/java/jre/lib/ibmjgssprovider.jar")
     testRuntime fileTree(dir: "$wasHome/runtimes/", include: '*.jar', exclude: '*.thinclient_8.5.0.jar')
+    testRuntime 'commons-dbcp:commons-dbcp:1.4'
 }
 
 

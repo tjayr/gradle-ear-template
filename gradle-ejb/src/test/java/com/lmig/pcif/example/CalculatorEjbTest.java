@@ -2,27 +2,29 @@ package com.lmig.pcif.example;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import org.hsqldb.Server;
 import org.hsqldb.persist.HsqlProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.DataSource;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import javax.naming.NamingException;
 import java.io.File;
-import java.io.IOException;
 
 /**
  * CalculatorTest.
@@ -30,47 +32,26 @@ import java.io.IOException;
 @RunWith(Arquillian.class)
 public class CalculatorEjbTest {
 
-    private static Logger log = LoggerFactory.getLogger(CalculatorEjbTest.class);
+    private static org.apache.log4j.Logger log = Logger.getLogger(CalculatorEjb.class);
 
     private Server server;
 
     @EJB
     private CalculatorInterface calculator;
 
-    @After
-    public void stopDb() {
-        if(server != null) {
-            server.stop();
-        }
-    }
-
-    @Before
-    public void startDb() throws Exception {
-
-        log.info("start db");
-        String path = System.getProperty("user.dir");
-
-        System.out.println("Starting Database");
-        HsqlProperties p = new HsqlProperties();
-        p.setProperty("server.database.0", "file:"+path+"/testdb");
-        p.setProperty("server.dbname.0", "mydb");
-        p.setProperty("server.port", "9001");
-        server = new Server();
-        server.setProperties(p);
-        server.setLogWriter(null); // can use custom writer
-        server.setErrWriter(null); // can use custom writer
-        server.start();
-
-
-    }
-
     @Deployment(name = "CalculatorEjbTest")
     public static Archive<?> createDeployment() {
         log.info("create deployment");
         JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "ejb.jar")
                 .addClasses(CalculatorEjb.class, CalculatorEjbTest.class, CalculatorInterface.class)
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-        File[] deps = Maven.resolver().resolve("org.hsqldb:hsqldb:2.3.1").withTransitivity().asFile();
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsManifestResource("ibm-ejb-bnd.xml")
+                .addAsManifestResource("was-persistence/persistence.xml", "persistence.xml");
+
+        //File[] deps = Maven.resolver().resolve("org.hsqldb:hsqldb:2.3.1").withTransitivity().asFile();
+
+        File[] deps = Maven.resolver().resolve("org.hibernate:hibernate-entitymanager:3.6.7.Final").withTransitivity().asFile();
+
 
         EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "calculator.ear");
         ear.addAsModule(jar);
@@ -78,11 +59,36 @@ public class CalculatorEjbTest {
         return ear;
     }
 
+
+    public void getDS() {
+        javax.naming.InitialContext ctx = null;
+        javax.sql.DataSource ds = null;
+        log.info("Attempting connection...");
+        System.out.println("connect");
+        try {
+            ctx = new javax.naming.InitialContext();
+            ds = (javax.sql.DataSource) ctx.lookup("jdbc/derby");
+            log.info(ds.toString());
+            System.out.println(ds.toString());
+        } catch (NamingException e) {
+            System.out.println(e) ;
+            log.error("peformanceappraisalstatus: COULDN'T CREATE CONNECTION!");
+            e.printStackTrace();
+        }
+    }
+
     /**
      * testAdd.
      */
     @Test
+    @DataSource("jdbc/derby")
+    @UsingDataSet("datasets/dummy-dataset.xml")
+    @ShouldMatchDataSet("datasets/dummy-dataset.xml")
+    @Transactional
     public void testAdd() {
+        log.debug("testAdd");
+        System.out.println("testAdd");
+        getDS();
         int result = calculator.add(new int[]{1, 2, 3, 4});
         assertEquals(10, result);
     }
@@ -91,6 +97,8 @@ public class CalculatorEjbTest {
      * testMultiply.
      */
     @Test
+    @Transactional
+    @DataSource("jdbc/derby")
     public void testMultiply() {
         int result = calculator.multiply(2, 5);
         assertEquals(10, result);

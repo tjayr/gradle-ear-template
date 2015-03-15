@@ -41,14 +41,11 @@
 
 
     <extension qualifier="persistence">
-        <property name="defaultDataSource">java:jboss/datasources/ExampleDS</property>
-        <property name="scriptsToExecuteBeforeTest">SET REFERENTIAL_INTEGRITY FALSE;</property>
-        <property name="userTransactionJndi">java:jboss/UserTransaction</property>
-        <!-- Uncomment these properties if you want to see database content during test execution -->
-        <!--
+        <property name="defaultDataSource">jdbc/derby</property>
         <property name="dumpData">true</property>
         <property name="dumpDirectory">/tmp/showcase</property>
-        -->
+        <property name="defaultDataSeedStrategy">CLEAN_INSERT</property>
+
     </extension>
 
 </arquillian>
