@@ -42,7 +42,7 @@
 
     <extension qualifier="persistence">
         <property name="defaultDataSource">jdbc/derby</property>
-        <property name="dumpData">true</property>
+        <property name="dumpData">false</property>
         <property name="dumpDirectory">/tmp/showcase</property>
         <property name="defaultDataSeedStrategy">CLEAN_INSERT</property>
 

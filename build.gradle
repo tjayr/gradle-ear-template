@@ -14,7 +14,11 @@ version = '1.0'
 ext.jbossHome = hasProperty('jbossHome') ? jbossHome : "/home/tony/software/wildfly-8.2.0.Final"
 
 subprojects {
+
     apply plugin: "io.spring.dependency-management"
+    apply plugin: "eclipse"
+    apply plugin: "eclipse-wtp"
+    apply plugin: "idea"
     apply plugin: 'java'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
@@ -27,11 +31,10 @@ subprojects {
     ext.libraryVersions = [
             javaee : '6.0',
             junit : '4.11',
-            arquillian : '1.1.5.Final',
+            arquillian : '1.1.4.Final',
             shrinkWrapResolverGradle: '2.2.0-beta-1',
             arquillian: '1.0.0.Beta2',
             hyperSql: '2.3.1' ,
-            slf4j: '1.7.10',
             arquillianPersistence: '1.0.0.Alpha7'
     ]
 

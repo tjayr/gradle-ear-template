@@ -11,7 +11,7 @@ apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
     imports {
-        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.7.Final'
+        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.4.Final'
         mavenBom 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-gradle-depchain:2.2.0-beta-1'
     }
 }
@@ -26,9 +26,8 @@ targetCompatibility = '1.6'
 
 dependencies {        
     compile "javax:javaee-api:${libraryVersions.javaee}"
-    compile 'org.slf4j:slf4j-api:1.7.7'
-    runtime 'org.slf4j:slf4j-log4j12:1.7.7'
-    runtime 'org.hibernate:hibernate-entitymanager:3.6.7.Final'
+
+    runtime ('org.eclipse.persistence:eclipselink:2.5.0')
 
     testCompile 'org.jboss.arquillian.junit:arquillian-junit-container'
     testCompile 'junit:junit:4.+'

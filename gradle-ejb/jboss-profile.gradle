@@ -9,7 +9,7 @@ configurations {
 
 dependencyManagement {
     imports {
-        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.5.Final'
+        mavenBom 'org.jboss.arquillian:arquillian-bom:1.1.4.Final'
         mavenBom 'org.jboss.spec:jboss-javaee-6.0:3.0.0.Final'
     }
 }

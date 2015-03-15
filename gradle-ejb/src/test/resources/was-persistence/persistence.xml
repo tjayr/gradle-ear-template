@@ -34,11 +34,18 @@
     </persistence-unit>         -->
 
 
+
+
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <non-jta-data-source>jdbc/derby</non-jta-data-source>
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <!--<non-jta-data-source>jdbc/derby</non-jta-data-source>-->
+        <jta-data-source>jdbc/derby</jta-data-source>
+
+
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="eclipselink.target-database" value="Derby"/>
+            <property name="eclipselink.weaving" value="false"/>
+            <property name="eclipselink.logging.level" value="FINEST"/>
         </properties>
     </persistence-unit>
 
