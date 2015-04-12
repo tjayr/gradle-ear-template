@@ -28,6 +28,7 @@ subprojects {
     def jdkHome = System.getenv("JAVA_HOME")
 
 
+
     ext.libraryVersions = [
             javaee : '6.0',
             junit : '4.11',

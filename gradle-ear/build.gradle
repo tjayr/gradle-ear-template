@@ -6,3 +6,12 @@ dependencies {
     earlib group: "org.slf4j", name: "slf4j-api", version:"1.7.10"
     earlib group: "org.slf4j", name: "slf4j-log4j12", version:"1.7.10"
 }
+
+ear {
+    appDirName 'src/main/application'
+    deploymentDescriptor {
+        description = "My customized EAR for the Gradle documentation"
+        initializeInOrder = true
+        module("gradle-ejb.jar", "ejb")
+    }
+}

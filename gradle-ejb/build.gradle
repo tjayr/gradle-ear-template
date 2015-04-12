@@ -16,6 +16,7 @@ dependencyManagement {
     }
 }
 
+def profile = System.getProperty("profile", "jboss")
 
 apply from: profile + '-profile.gradle'
 

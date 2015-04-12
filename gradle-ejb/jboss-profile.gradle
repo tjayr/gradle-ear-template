@@ -26,6 +26,7 @@ dependencies {
 }
 
 test {
+    jvmArgs '-XX:+StartAttachListener'
     systemProperty 'arq.container.wildfly.configuration.jbossHome', 'build/unpacked/dist/wildfly-8.1.0.Final'
     systemProperty 'arquillian.launch', 'wildfly'
 }

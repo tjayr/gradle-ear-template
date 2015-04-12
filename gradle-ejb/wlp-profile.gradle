@@ -1,16 +1,18 @@
 def jdkHome = System.getenv("JAVA_HOME")
-def wasHome = System.getProperty("WAS85_HOME", "/home/tony/IBM/WebSphere/AppServer")
+def wasHome = System.getenv("WAS85_HOME")
 if(wasHome == null) {
     wasHome = "/home/tony/IBM/WebSphere/AppServer"
 }
 
 
 dependencies {
-    testRuntime "org.jboss.arquillian.container:arquillian-was-remote-8.5:1.0.0.Final-SNAPSHOT"
+    //testRuntime "org.jboss.arquillian.container:arquillian-was-remote-8.5:1.0.0.Final-SNAPSHOT"
+    testRuntime 'org.jboss.arquillian.container:arquillian-wlp-managed-8.5:1.0.0.Beta1'
+
     testRuntime files("$jdkHome/lib/tools.jar")
-    testRuntime files("$wasHome/dev/was_public.jar")
+    /*testRuntime files("$wasHome/dev/was_public.jar")
     testRuntime files("$wasHome/java/jre/lib/ibmjgssprovider.jar")
-    testRuntime fileTree(dir: "$wasHome/runtimes/", include: '*.jar', exclude: '*.thinclient_8.5.0.jar')
+    testRuntime fileTree(dir: "$wasHome/runtimes/", include: '*.jar', exclude: '*.thinclient_8.5.0.jar')  */
 }
 
 
