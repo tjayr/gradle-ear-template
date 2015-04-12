@@ -22,12 +22,14 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
-    //apply plugin: 'findbugs'
+    apply plugin: 'findbugs'
     //apply plugin: 'checkstyle'
 
     def jdkHome = System.getenv("JAVA_HOME")
 
 
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
     ext.libraryVersions = [
             javaee : '6.0',
@@ -56,6 +58,14 @@ subprojects {
      /*checkstyle {
          configFile = new File(rootDir, "checkstyle.xml")
      } */
+
+    findbugs {
+        toolVersion = "2.0.1"
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+        effort = "max"
+        reportLevel = "high"
+    }
 
 }
 
