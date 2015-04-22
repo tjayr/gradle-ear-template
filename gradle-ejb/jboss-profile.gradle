@@ -4,7 +4,7 @@ repositories {
 }
 
 configurations {
-    install
+    //install
 }
 
 dependencyManagement {
@@ -19,10 +19,11 @@ dependencies {
 
     testCompile 'org.jboss.spec.javax.servlet:jboss-servlet-api_3.0_spec'
     testCompile 'javax.enterprise:cdi-api'
-    testRuntime 'org.wildfly:wildfly-arquillian-container-managed:8.1.0.Final'
+    //testRuntime 'org.wildfly:wildfly-arquillian-container-managed:8.1.0.Final'
+    testRuntime 'org.wildfly:wildfly-arquillian-container-remote:8.2.0.Final'
     testCompile 'junit:junit:4.+'
 
-    install 'org.wildfly:wildfly-dist:8.1.0.Final@zip'
+    //install 'org.wildfly:wildfly-dist:8.1.0.Final@zip'
 }
 
 test {
@@ -32,11 +33,11 @@ test {
 }
 
 task unzip(type: Copy) {
-    def zipFile = configurations.install.singleFile
-    def outputDir = file("${buildDir}/unpacked/dist")
-
-    from zipTree(zipFile)
-    into outputDir
-
-    tasks.test.dependsOn unzip
+//    def zipFile = configurations.install.singleFile
+//    def outputDir = file("${buildDir}/unpacked/dist")
+//
+//    from zipTree(zipFile)
+//    into outputDir
+//
+//    tasks.test.dependsOn unzip
 }

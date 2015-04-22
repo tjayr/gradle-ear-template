@@ -22,8 +22,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
-    apply plugin: 'findbugs'
-    //apply plugin: 'checkstyle'
+//    apply plugin: 'findbugs'
+//    apply plugin: 'checkstyle'
 
     def jdkHome = System.getenv("JAVA_HOME")
 
@@ -55,17 +55,29 @@ subprojects {
         testCompile 'junit:junit:4.+'
     }
 
-     /*checkstyle {
-         configFile = new File(rootDir, "checkstyle.xml")
-     } */
-
-    findbugs {
-        toolVersion = "2.0.1"
-        sourceSets = [sourceSets.main]
-        ignoreFailures = true
-        effort = "max"
-        reportLevel = "high"
-    }
+//     checkstyle {
+//         configFile = new File(rootDir, "config/checkstyle.xml")
+//     }
+//
+//    task checkstyleHtml << {
+//        ant.xslt(in: checkstyleMain.reports.xml.destination,
+//                 style: new File(rootDir, 'config/checkstyle-noframes-sorted.xsl'),
+//                 out: new File("",'main.html'))
+//    }
+//
+//    checkstyleMain.finalizedBy checkstyleHtml
+//
+//    findbugs {
+//        toolVersion = "2.0.1"
+//        sourceSets = [sourceSets.main]
+//        ignoreFailures = true
+//        effort = "max"
+//        reportLevel = "high"
+//    }
+//
+//    pmd {
+//
+//    }
 
 }
 

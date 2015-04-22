@@ -21,8 +21,13 @@ import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
 import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import java.io.File;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * CalculatorTest.
@@ -35,6 +40,11 @@ public class CalculatorEjbTest {
     @EJB
     private CalculatorInterface calculator;
 
+    Logger log = Logger.getLogger("CalculatorEjbTest");
+
+    @PersistenceContext
+    EntityManager em;
+
     @Deployment(name = "calculator")
     public static Archive<?> createDeployment() {
         System.out.println("create deployment");
@@ -44,7 +54,7 @@ public class CalculatorEjbTest {
                 .addClasses(CalculatorEjbTest.class, CalculatorInterface.class);
 
         JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "calculator-ejb.jar")
-                .addClasses(CalculatorEjb.class, CalculatorEjbTest.class, CalculatorInterface.class)
+                .addClasses(CalculatorEjb.class, CalculatorEjbTest.class, CalculatorInterface.class, UserAccount.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsManifestResource(
                         new StringAsset(
@@ -72,33 +82,40 @@ public class CalculatorEjbTest {
         ear.addAsLibraries(deps);
         ear.addAsManifestResource("application.xml", "application.xml");
 
-
+        System.out.println("Return deployment");
         return war;
     }
 
 
-    @Test
-    @Ignore
-    public void should_be_able_to_lookup_and_invoke_ejb() throws Exception {
-        String name = "Earthlings";
-        String lookup = "java:global/gradle-ear/gradle-ejb/CalculatorEjb";
-
-        CalculatorInterface calc = (CalculatorInterface) new InitialContext().lookup("java:global/test/service/GreeterDelegate");
-        calc.add(1,1);
-    }
+//    @Test
+//    @Ignore
+//    public void should_be_able_to_lookup_and_invoke_ejb() throws Exception {
+//        String name = "Earthlings";
+//        String lookup = "java:global/gradle-ear/gradle-ejb/CalculatorEjb";
+//
+//        CalculatorInterface calc = (CalculatorInterface) new InitialContext().lookup("java:global/test/service/GreeterDelegate");
+//        calc.add(1,1);
+//    }
 
 
     /**
      * testAdd.
      */
     @Test
-    @DataSource("jdbc/derby")
     @UsingDataSet("datasets/dummy-dataset.xml")
     @ShouldMatchDataSet("datasets/dummy-dataset.xml")
-    @Transactional
     public void testAdd() {
+        log.info("testAdd");
         System.out.println("testAdd");
         int result = calculator.add(new int[]{1, 2, 3, 4});
+
+        Query q = em.createNativeQuery("select * from useraccount", UserAccount.class);
+        List<UserAccount> data = q.getResultList();
+        for(UserAccount u : data) {
+            System.out.println(u);
+            log.info(u.toString());
+        }
+
         assertEquals(10, result);
     }
 
@@ -106,9 +123,8 @@ public class CalculatorEjbTest {
      * testMultiply.
      */
     @Test
-    @Transactional
-    @DataSource("jdbc/derby")
     public void testMultiply() {
+        log.info("testMultiply");
         int result = calculator.multiply(2, 5);
         assertEquals(10, result);
     }

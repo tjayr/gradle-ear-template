@@ -39,6 +39,7 @@
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <!--<non-jta-data-source>jdbc/derby</non-jta-data-source>-->
+        <!--<jta-data-source>java:jboss/datasources/derby</jta-data-source>-->
         <jta-data-source>jdbc/derby</jta-data-source>
 
 

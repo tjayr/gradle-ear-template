@@ -10,7 +10,7 @@
     </engine>
 
 
-    <container qualifier="wlp" default="true">
+    <container qualifier="wlp" default="false">
         <configuration>
             <property name="wlpHome">/home/tony/software/wlp-beta-3.0/wlp</property>
             <property name="serverName">default</property>
@@ -32,15 +32,16 @@
         </configuration>
     </container>
 
-    <container qualifier="jboss" default="false">
+    <container qualifier="jboss" default="true">
         <configuration>
             <property name="jbossHome">/home/tony/software/wildfly-8.2.0.Final</property>
+            <property name="serverConfig">standalone-full.xml</property>
         </configuration>
     </container>
 
 
     <extension qualifier="persistence">
-        <property name="defaultDataSource">jdbc/derby</property>
+        <property name="defaultDataSource">java:jboss/datasources/derby</property>
         <property name="dumpData">false</property>
         <property name="dumpDirectory">/tmp/showcase</property>
         <property name="defaultDataSeedStrategy">CLEAN_INSERT</property>

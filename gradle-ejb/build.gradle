@@ -26,14 +26,13 @@ targetCompatibility = '1.6'
 
 
 dependencies {        
-    compile "javax:javaee-api:${libraryVersions.javaee}"
 
+    compile "org.jboss.spec:jboss-javaee-6.0:3.0.2.Final"
     runtime ('org.eclipse.persistence:eclipselink:2.5.0')
 
     testCompile 'org.jboss.arquillian.junit:arquillian-junit-container'
     testCompile 'junit:junit:4.+'
     testCompile 'org.mockito:mockito-all:1.10.19'
-    testCompile "org.hsqldb:hsqldb:${libraryVersions.hyperSql}"
     testRuntime 'org.jboss.logmanager:jboss-logmanager:1.5.4.Final'
     testCompile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.1.0'
 }
